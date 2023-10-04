@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="dcdeda4b-8b52-44f3-ad78-27711a1f3120" name="go-docker">
+        <fileTransfer accessType="SFTP" port="22" sshConfigId="02fd3067-bd61-4455-94fc-0fba58637aff" sshConfig="go-docker">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

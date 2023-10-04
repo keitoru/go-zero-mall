@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" connectionConfig="{&quot;serverAliveInterval&quot;:300}" id="02fd3067-bd61-4455-94fc-0fba58637aff" port="22" customName="go-docker" nameFormat="CUSTOM" useOpenSSHConfig="true">
+        <option name="customName" value="go-docker" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>
