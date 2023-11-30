@@ -37,7 +37,7 @@ func (l *CreateLogic) Create(in *pay.CreateRequest) (*pay.CreateResponse, error)
 	}
 
 	// 查询订单是否存在
-	_, err = l.svcCtx.OrderRpc.Detail(l.ctx, &order.DetailRequest{
+	orderRes, err := l.svcCtx.OrderRpc.Detail(l.ctx, &order.DetailRequest{
 		Id: in.Oid,
 	})
 	if err != nil {
@@ -53,7 +53,7 @@ func (l *CreateLogic) Create(in *pay.CreateRequest) (*pay.CreateResponse, error)
 	newPay := model.Pay{
 		Uid:    in.Uid,
 		Oid:    in.Oid,
-		Amount: in.Amount,
+		Amount: orderRes.Amount,
 		Source: 0,
 		Status: 0,
 	}

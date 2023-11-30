@@ -8,8 +8,9 @@ option go_package = "./order";
 message CreateRequest {
   int64 Uid = 1;
   int64 Pid = 2;
-  int64 Amount = 3;
-  int64 Status = 4;
+//  int64 Amount = 3;
+//  int64 Status = 4;
+  int64 Num = 5;
 }
 message CreateResponse {
   int64 id = 1;
@@ -46,6 +47,7 @@ message DetailResponse {
   int64 Pid = 3;
   int64 Amount = 4;
   int64 Status = 5;
+  int64 Num = 6;
 }
 // 订单详情
 
@@ -68,6 +70,7 @@ message PaidResponse {
 
 service Order {
   rpc Create(CreateRequest) returns(CreateResponse);
+  rpc CreateRevert(CreateRequest) returns(CreateResponse);
   rpc Update(UpdateRequest) returns(UpdateResponse);
   rpc Remove(RemoveRequest) returns(RemoveResponse);
   rpc Detail(DetailRequest) returns(DetailResponse);

@@ -50,6 +50,7 @@ func (l *ListLogic) List(in *order.ListRequest) (*order.ListResponse, error) {
 			Id:     item.Id,
 			Uid:    item.Uid,
 			Pid:    item.Pid,
+			Num:    item.Num,
 			Amount: item.Amount,
 			Status: item.Status,
 		})

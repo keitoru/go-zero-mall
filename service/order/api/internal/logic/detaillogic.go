@@ -38,5 +38,6 @@ func (l *DetailLogic) Detail(req *types.DetailRequest) (resp *types.DetailRespon
 		Pid:    res.Pid,
 		Amount: res.Amount,
 		Status: res.Status,
+		Num:    res.Num,
 	}, nil
 }

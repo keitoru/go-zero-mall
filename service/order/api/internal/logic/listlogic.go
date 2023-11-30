@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
 
 	"go-zero-mall/service/order/api/internal/svc"
 	"go-zero-mall/service/order/api/internal/types"
@@ -25,8 +26,9 @@ func NewListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ListLogic {
 }
 
 func (l *ListLogic) List(req *types.ListRequest) (resp []*types.ListResponse, err error) {
+	uid, _ := l.ctx.Value("uid").(json.Number).Int64()
 	res, err := l.svcCtx.OrderRpc.List(l.ctx, &order.ListRequest{
-		Uid: req.Uid,
+		Uid: uid,
 	})
 	if err != nil {
 		return nil, err
@@ -40,6 +42,7 @@ func (l *ListLogic) List(req *types.ListRequest) (resp []*types.ListResponse, er
 			Pid:    item.Pid,
 			Amount: item.Amount,
 			Status: item.Status,
+			Num:    item.Num,
 		})
 	}
 

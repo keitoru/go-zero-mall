@@ -20,6 +20,12 @@ OrderRpc:
       - etcd:2379
     Key: order.rpc
 
+ProductRpc:
+  Etcd:
+    Hosts:
+      - etcd:2379
+    Key: product.rpc
+
 Telemetry:
   Name: order.api
   Endpoint: http://jaeger:14268/api/traces

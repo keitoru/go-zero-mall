@@ -1,10 +1,8 @@
 type (
 	// 订单创建
 	CreateRequest {
-		Uid    int64 `json:"uid"`
-		Pid    int64 `json:"pid"`
-		Amount int64 `json:"amount"`
-		Status int64 `json:"status"`
+		Pid int64 `json:"pid"`
+		Num int64 `json:"num"`
 	}
 	CreateResponse {
 		Id int64 `json:"id"`
@@ -14,7 +12,6 @@ type (
 	// 订单修改
 	UpdateRequest {
 		Id     int64 `json:"id"`
-		Uid    int64 `json:"uid,optional"`
 		Pid    int64 `json:"pid,optional"`
 		Amount int64 `json:"amount,optional"`
 		Status int64 `json:"status,optional"`
@@ -39,6 +36,7 @@ type (
 		Id     int64 `json:"id"`
 		Uid    int64 `json:"uid"`
 		Pid    int64 `json:"pid"`
+		Num    int64 `json:"num"`
 		Amount int64 `json:"amount"`
 		Status int64 `json:"status"`
 	}
@@ -46,12 +44,12 @@ type (
 
 	// 订单列表
 	ListRequest {
-		Uid int64 `json:"uid"`
 	}
 	ListResponse {
 		Id     int64 `json:"id"`
 		Uid    int64 `json:"uid"`
 		Pid    int64 `json:"pid"`
+		Num    int64 `json:"num"`
 		Amount int64 `json:"amount"`
 		Status int64 `json:"status"`
 	}

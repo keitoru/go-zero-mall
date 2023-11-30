@@ -2,10 +2,8 @@
 package types
 
 type CreateRequest struct {
-	Uid    int64 `json:"uid"`
-	Pid    int64 `json:"pid"`
-	Amount int64 `json:"amount"`
-	Status int64 `json:"status"`
+	Pid int64 `json:"pid"`
+	Num int64 `json:"num"`
 }
 
 type CreateResponse struct {
@@ -14,7 +12,6 @@ type CreateResponse struct {
 
 type UpdateRequest struct {
 	Id     int64 `json:"id"`
-	Uid    int64 `json:"uid,optional"`
 	Pid    int64 `json:"pid,optional"`
 	Amount int64 `json:"amount,optional"`
 	Status int64 `json:"status,optional"`
@@ -38,18 +35,19 @@ type DetailResponse struct {
 	Id     int64 `json:"id"`
 	Uid    int64 `json:"uid"`
 	Pid    int64 `json:"pid"`
+	Num    int64 `json:"num"`
 	Amount int64 `json:"amount"`
 	Status int64 `json:"status"`
 }
 
 type ListRequest struct {
-	Uid int64 `json:"uid"`
 }
 
 type ListResponse struct {
 	Id     int64 `json:"id"`
 	Uid    int64 `json:"uid"`
 	Pid    int64 `json:"pid"`
+	Num    int64 `json:"num"`
 	Amount int64 `json:"amount"`
 	Status int64 `json:"status"`
 }

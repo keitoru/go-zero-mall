@@ -2,9 +2,7 @@
 package types
 
 type CreateRequest struct {
-	Uid    int64 `json:"uid"`
-	Oid    int64 `json:"oid"`
-	Amount int64 `json:"amount"`
+	Oid int64 `json:"oid"`
 }
 
 type CreateResponse struct {

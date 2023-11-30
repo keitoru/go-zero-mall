@@ -42,6 +42,7 @@ type (
 		Id         int64     `db:"id"`
 		Uid        int64     `db:"uid"`    // 用户ID
 		Pid        int64     `db:"pid"`    // 产品ID
+		Num        int64     `db:"num"`    // 下单数量
 		Amount     int64     `db:"amount"` // 订单金额
 		Status     int64     `db:"status"` // 订单状态
 		CreateTime time.Time `db:"create_time"`
@@ -92,8 +93,8 @@ func (m *defaultOrderModel) FindOne(ctx context.Context, id int64) (*Order, erro
 func (m *defaultOrderModel) Insert(ctx context.Context, data *Order) (sql.Result, error) {
 	orderIdKey := fmt.Sprintf("%s%v", cacheOrderIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, orderRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Uid, data.Pid, data.Amount, data.Status)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?)", m.table, orderRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Uid, data.Pid, data.Num, data.Amount, data.Status)
 	}, orderIdKey)
 	return ret, err
 }
@@ -102,7 +103,7 @@ func (m *defaultOrderModel) Update(ctx context.Context, data *Order) error {
 	orderIdKey := fmt.Sprintf("%s%v", cacheOrderIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, orderRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Uid, data.Pid, data.Amount, data.Status, data.Id)
+		return conn.ExecCtx(ctx, query, data.Uid, data.Pid, data.Num, data.Amount, data.Status, data.Id)
 	}, orderIdKey)
 	return err
 }

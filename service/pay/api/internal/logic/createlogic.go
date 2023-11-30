@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
 
 	"go-zero-mall/service/pay/api/internal/svc"
 	"go-zero-mall/service/pay/api/internal/types"
@@ -25,10 +26,10 @@ func NewCreateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateLogi
 }
 
 func (l *CreateLogic) Create(req *types.CreateRequest) (resp *types.CreateResponse, err error) {
+	uid, _ := l.ctx.Value("Uid").(json.Number).Int64()
 	res, err := l.svcCtx.PayRpc.Create(l.ctx, &pay.CreateRequest{
-		Uid:    req.Uid,
-		Oid:    req.Oid,
-		Amount: req.Amount,
+		Uid: uid,
+		Oid: req.Oid,
 	})
 	if err != nil {
 		return nil, err

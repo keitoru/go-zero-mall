@@ -10,6 +10,8 @@ import (
 type ServiceContext struct {
 	Config config.Config
 
+	ProductMysql sqlx.SqlConn
+
 	ProductModel model.ProductModel
 }
 
@@ -17,6 +19,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	conn := sqlx.NewMysql(c.Mysql.DataSource)
 	return &ServiceContext{
 		Config:       c,
+		ProductMysql: conn,
 		ProductModel: model.NewProductModel(conn, c.CacheRedis),
 	}
 }

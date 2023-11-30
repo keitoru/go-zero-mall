@@ -1,0 +1,41 @@
+syntax = "v1"
+
+// 引入 base.api 文件
+import "apis/base.api"
+
+type AdminInfoReq {
+	Id int64 `path:"id"`
+}
+
+type AdminInfo {
+	Id   int64  `path:"id"`
+	Name string `json:"name"`
+	Age  int    `json:"age"`
+}
+
+type AdminInfoResp {
+	Base           // Base 为 base.api 中的公共结构体，在 api 描述语言中，没有 package 的概念
+	Data AdminInfo `json:"data"`
+}
+
+type AdminInfoUpdateReq {
+	Id int64 `json:"id"`
+	AdminInfo
+}
+
+type AdminInfoUpdateResp {
+	Base
+}
+
+service admin {
+	@handler adminInfo
+	get /admin/info/:id (AdminInfoReq) returns (AdminInfoResp)
+}
+
+@server (
+	jwt: Auth // 开启 jwt 认证
+)
+service admin {
+	@handler adminInfoUpdate
+	post /admin/info/update (AdminInfoUpdateReq) returns (AdminInfoUpdateResp)
+}

@@ -19,7 +19,7 @@ UserRpc:
   Token: 6jKNZbEpYGeUMAifz10gOnmoty3TV  # Token 值
   Etcd:
     Hosts:
-      - 127.0.0.1:2379
+      - etcd:2379
     Key: user.rpc
 
 Telemetry:
