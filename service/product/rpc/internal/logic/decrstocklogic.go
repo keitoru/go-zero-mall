@@ -66,5 +66,8 @@ func (l *DecrStockLogic) DecrStock(in *product.DecrStockRequest) (*product.DecrS
 		return nil, err
 	}
 
+	// 人为制造异常
+	//return nil, status.Error(codes.Aborted, dtmcli.ResultFailure)
+
 	return &product.DecrStockResponse{}, nil
 }

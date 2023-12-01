@@ -78,7 +78,7 @@ func (m *defaultOrderModel) TxUpdate(ctx context.Context, tx *sql.Tx, data *Orde
 	productIdKey := fmt.Sprintf("%s%v", cacheOrderIdPrefix, data.Id)
 	_, err := m.Exec(func(conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, orderRowsWithPlaceHolder)
-		return tx.ExecContext(ctx, query, data.Uid, data.Pid, data.Amount, data.Status, data.Id)
+		return tx.ExecContext(ctx, query, data.Uid, data.Pid, data.Num, data.Amount, data.Status, data.Id)
 	}, productIdKey)
 	return err
 }

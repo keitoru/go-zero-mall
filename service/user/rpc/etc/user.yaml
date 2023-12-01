@@ -35,3 +35,8 @@ Prometheus:
   Port: 9090
   Path: /metrics
 
+Log:
+  ServiceName: user-rpc
+  Level: error
+  Mode: file
+  KeepDays: 5

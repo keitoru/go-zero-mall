@@ -53,6 +53,7 @@ func (l *CreateRevertLogic) CreateRevert(in *order.CreateRequest) (*order.Create
 		// 查询用户最新创建的订单
 		resOrder, err := l.svcCtx.OrderModel.FindOneByUid(l.ctx, in.Uid)
 		if err != nil {
+			fmt.Printf("订单不存在")
 			return fmt.Errorf("订单不存在")
 		}
 
@@ -60,6 +61,7 @@ func (l *CreateRevertLogic) CreateRevert(in *order.CreateRequest) (*order.Create
 		resOrder.Status = 9
 		err = l.svcCtx.OrderModel.TxUpdate(l.ctx, tx, resOrder)
 		if err != nil {
+			fmt.Printf("订单更新失败:%v", err)
 			return fmt.Errorf("订单更新失败")
 		}
 

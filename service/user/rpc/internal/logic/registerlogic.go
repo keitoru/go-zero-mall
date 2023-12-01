@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"github.com/pkg/errors"
+	"go-zero-mall/common/xerr"
 
 	"go-zero-mall/common/cryptx"
 	"go-zero-mall/service/user/model"
@@ -11,6 +13,8 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"google.golang.org/grpc/status"
 )
+
+var ErrUserAlreadyRegisterError = xerr.NewErrMsg("该用户已被注册")
 
 type RegisterLogic struct {
 	ctx    context.Context
@@ -30,7 +34,7 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterRespon
 	// 判断手机号是否已经注册
 	_, err := l.svcCtx.UserModel.FindOneByMobile(l.ctx, in.Mobile)
 	if err == nil {
-		return nil, status.Error(100, "该用户已存在")
+		return nil, errors.Wrapf(ErrUserAlreadyRegisterError, "用户已经存在 mobile:%s,err:%v", in.Mobile, err)
 	}
 
 	if err == model.ErrNotFound {
@@ -44,12 +48,12 @@ func (l *RegisterLogic) Register(in *user.RegisterRequest) (*user.RegisterRespon
 
 		res, err := l.svcCtx.UserModel.Insert(l.ctx, &newUser)
 		if err != nil {
-			return nil, status.Error(500, err.Error())
+			return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "Register db user Insert err:%v,user:%+v", err, newUser)
 		}
 
 		newUser.Id, err = res.LastInsertId()
 		if err != nil {
-			return nil, status.Error(500, err.Error())
+			return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "Register db user insertResult.LastInsertId err:%v,user:%+v", err, newUser)
 		}
 
 		return &user.RegisterResponse{

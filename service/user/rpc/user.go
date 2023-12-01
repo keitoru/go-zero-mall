@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-
+	"go-zero-mall/common/interceptor/rpcserver"
 	"go-zero-mall/service/user/rpc/internal/config"
 	"go-zero-mall/service/user/rpc/internal/server"
 	"go-zero-mall/service/user/rpc/internal/svc"
@@ -33,6 +33,9 @@ func main() {
 		}
 	})
 	defer s.Stop()
+
+	//rpc log,grpc的全局拦截器
+	s.AddUnaryInterceptors(rpcserver.LoggerInterceptor)
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()

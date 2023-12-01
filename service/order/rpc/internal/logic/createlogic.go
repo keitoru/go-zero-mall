@@ -30,6 +30,30 @@ func NewCreateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateLogi
 }
 
 func (l *CreateLogic) Create(in *order.CreateRequest) (*order.CreateResponse, error) {
+	// 查询用户是否存在
+	_, err := l.svcCtx.UserRpc.UserInfo(l.ctx, &user.UserInfoRequest{
+		Id: in.Uid,
+	})
+	if err != nil {
+		return nil, status.Error(500, "用户不存在")
+	}
+
+	// 查询产品是否存在
+	productRes, err := l.svcCtx.ProductRpc.Detail(l.ctx, &product.DetailRequest{
+		Id: in.Pid,
+	})
+	if err != nil {
+		return nil, status.Error(500, "产品不存在")
+	}
+
+	newOrder := model.Order{
+		Uid:    in.Uid,
+		Pid:    in.Pid,
+		Num:    in.Num,
+		Amount: in.Num * productRes.Amount,
+		Status: 1,
+	}
+
 	// 获取 RawDB
 	db, err := l.svcCtx.OrderMysql.RawDB()
 	if err != nil {
@@ -44,56 +68,20 @@ func (l *CreateLogic) Create(in *order.CreateRequest) (*order.CreateResponse, er
 	// 开启子事务屏障
 	if err := barrier.CallWithDB(db, func(tx *sql.Tx) error {
 
-		// 查询用户是否存在
-		_, err := l.svcCtx.UserRpc.UserInfo(l.ctx, &user.UserInfoRequest{
-			Id: in.Uid,
-		})
-		if err != nil {
-			return fmt.Errorf("用户不存在")
-		}
-
-		// 查询产品是否存在
-		productRes, err := l.svcCtx.ProductRpc.Detail(l.ctx, &product.DetailRequest{
-			Id: in.Pid,
-		})
-		if err != nil {
-			return fmt.Errorf("产品不存在")
-		}
-
-		newOrder := model.Order{
-			Uid:    in.Uid,
-			Pid:    in.Pid,
-			Num:    in.Num,
-			Amount: in.Num * productRes.Amount,
-			Status: 0,
-		}
 		// 创建订单
-		_, err = l.svcCtx.OrderModel.TxInsert(l.ctx, tx, &newOrder)
+		res, err := l.svcCtx.OrderModel.TxInsert(l.ctx, tx, &newOrder)
 		if err != nil {
 			return fmt.Errorf("订单创建失败")
 		}
+
+		newOrder.Id, _ = res.LastInsertId()
 
 		return nil
 	}); err != nil {
 		return nil, status.Error(500, err.Error())
 	}
 
-	//newOrder.Id, err = res.LastInsertId()
-	//if err != nil {
-	//	return nil, status.Error(500, err.Error())
-	//}
-	//// 更新产品库存
-	//_, err = l.svcCtx.ProductRpc.Update(l.ctx, &product.UpdateRequest{
-	//	Id:     productRes.Id,
-	//	Name:   productRes.Name,
-	//	Desc:   productRes.Desc,
-	//	Stock:  productRes.Stock - newOrder.Num,
-	//	Amount: productRes.Amount,
-	//	Status: productRes.Status,
-	//})
-	//if err != nil {
-	//	return nil, err
-	//}
-
-	return &order.CreateResponse{}, nil
+	return &order.CreateResponse{
+		Id: newOrder.Id,
+	}, nil
 }
