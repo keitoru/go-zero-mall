@@ -37,6 +37,7 @@ Prometheus:
 
 Log:
   ServiceName: user-rpc
-  Level: error
+  Level: debug
   Mode: file
-  KeepDays: 5
+  Path: ./../../../logs/user_rpc
+  Stat: false
